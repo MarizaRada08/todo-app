@@ -1,0 +1,83 @@
+<div class="flex items-center justify-center min-h-screen bg-pink-500 p-4">
+  <div class="w-full max-w-md bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+    <div class="p-4">
+      <!-- Add Task Input with Add Button -->
+      <div class="relative mb-4 flex">
+        <div class="relative flex-1">
+          <input
+            matInput
+            [(ngModel)]="newTodoTitle"
+            placeholder="Add a task..."
+            class="w-full bg-gray-700 text-gray-200 py-3 px-10 rounded-l-md focus:outline-none"
+            (keyup.enter)="addTodo()"
+          />
+          <div class="absolute inset-y-0 left-3 flex items-center">
+            <mat-icon class="text-gray-500 text-xl">menu</mat-icon>
+          </div>
+        </div>
+        <button
+          mat-flat-button
+          (click)="addTodo()"
+          class="bg-pink-500 hover:bg-pink-600 text-white px-4 rounded-r-md focus:outline-none transition duration-200"
+        >
+          Add
+        </button>
+      </div>
+
+      <!-- Task List -->
+      <div class="space-y-2">
+        <div *ngFor="let todo of todos; let i = index" class="relative">
+          <div class="flex items-start p-2 rounded-md group">
+            <div *ngIf="todo.pinned" class="absolute left-0 -ml-1 mt-1">
+              <mat-icon class="text-pink-500 text-sm">flag</mat-icon>
+            </div>
+            <div class="flex items-center h-5 ml-2">
+              <div 
+                class="w-4 h-4 border border-gray-500 rounded flex items-center justify-center cursor-pointer"
+                [class.bg-gray-700]="!todo.completed"
+                [class.border-gray-500]="!todo.completed"
+                [class.bg-transparent]="todo.completed"
+                [class.border-gray-400]="todo.completed"
+                (click)="toggleComplete(todo)"
+              >
+                <mat-icon *ngIf="todo.completed" class="text-gray-300 text-xs">check</mat-icon>
+              </div>
+            </div>
+            <div class="ml-3 text-sm flex-1">
+              <div class="text-gray-200" [class.line-through]="todo.completed" [class.text-gray-400]="todo.completed">
+                {{ todo.title }}
+              </div>
+              <div *ngIf="todo.description" class="text-gray-400 text-xs mt-0.5">
+                {{ todo.description }}
+              </div>
+            </div>
+            <button
+              mat-icon-button
+              (click)="toggleMenu(i)"
+              class="text-gray-400 hover:text-gray-300 focus:outline-none"
+            >
+              <mat-icon>more_horiz</mat-icon>
+            </button>
+          </div>
+
+          <div *ngIf="showMenu && activeTaskIndex === i" class="absolute right-0 mt-1 w-40 bg-gray-700 rounded-md shadow-lg z-10">
+            <div class="py-1">
+              <button mat-menu-item class="flex items-center w-full px-4 py-2 text-sm text-gray-200 hover:bg-gray-600" (click)="togglePin(todo)">
+                <mat-icon class="h-4 w-4 mr-2">push_pin</mat-icon>
+                Pin on the top
+              </button>
+              <button mat-menu-item class="flex items-center w-full px-4 py-2 text-sm text-gray-200 hover:bg-gray-600" (click)="addMemo(todo)">
+                <mat-icon class="h-4 w-4 mr-2">note_add</mat-icon>
+                Add a memo
+              </button>
+              <button mat-menu-item class="flex items-center w-full px-4 py-2 text-sm text-gray-200 hover:bg-gray-600" (click)="deleteTodo(todo.id)">
+                <mat-icon class="h-4 w-4 mr-2">delete</mat-icon>
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
